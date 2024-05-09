@@ -22,7 +22,12 @@ class MainApp extends StatelessWidget {
           tertiary: Color(0xff0A0A0A),
         ),
       ),
-      home: HomePage(),
+      routes: {
+        "/": (context) => HomePage(),
+        "/work": (context) => WorkingPage(),
+        "/break": (context) => BreakingPage(),
+        "/rest": (context) => RestingPage(),
+      },
     );
   }
 }
@@ -170,5 +175,32 @@ class HomePageBody extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class WorkingPage extends StatelessWidget {
+  const WorkingPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class BreakingPage extends StatelessWidget {
+  const BreakingPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class RestingPage extends StatelessWidget {
+  const RestingPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }
