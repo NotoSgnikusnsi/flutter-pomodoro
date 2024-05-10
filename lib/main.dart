@@ -35,13 +35,15 @@ class MainApp extends StatelessWidget {
             return MaterialPageRoute(
               builder: (context) => BreakingPage(data: args?['data']),
             );
-          // case '/rest':
-          //   final args = settings.arguments as Map<String, dynamic>?;
-          //   return MaterialPageRoute(
-          //     builder: (context) => RestingPage(data: args?['data']),
-          //   );
+          case '/rest':
+            final args = settings.arguments as Map<String, dynamic>?;
+            return MaterialPageRoute(
+              builder: (context) => RestingPage(data: args?['data']),
+            );
           default:
-            return MaterialPageRoute(builder: (context) => HomePage());
+            return MaterialPageRoute(
+              builder: (context) => HomePage(),
+            );
         }
       },
     );
