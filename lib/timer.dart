@@ -32,24 +32,29 @@ class PomodoroTimer {
       _isTimerRunning = true;
     }
 
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (_currentSeconds == 0) {
-        if (_currentMinutes > 0) {
-          _currentMinutes--;
-          _currentSeconds = 59;
-        }
-      } else {
-        _currentSeconds--;
-      }
+    if (_timer == null || !_timer!.isActive) {
+      _timer = Timer.periodic(
+        Duration(seconds: 1),
+        (timer) {
+          if (_currentSeconds == 0) {
+            if (_currentMinutes > 0) {
+              _currentMinutes--;
+              _currentSeconds = 59;
+            }
+          } else {
+            _currentSeconds--;
+          }
 
-      if (_currentMinutes == 0 && _currentSeconds == 0) {
-        print('Timer completed');
-        _timer?.cancel();
-      } else {
-        print(
-            'Time left: $_currentMinutes minutes and $_currentSeconds seconds');
-      }
-    });
+          if (_currentMinutes == 0 && _currentSeconds == 0) {
+            print('Timer completed');
+            _timer?.cancel();
+          } else {
+            print(
+                'Time left: $_currentMinutes minutes and $_currentSeconds seconds');
+          }
+        },
+      );
+    }
   }
 
   void stopTimer() {
