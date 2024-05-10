@@ -30,11 +30,11 @@ class MainApp extends StatelessWidget {
             return MaterialPageRoute(
               builder: (context) => WorkingPage(data: args?['data']),
             );
-          // case '/break':
-          //   final args = settings.arguments as Map<String, dynamic>?;
-          //   return MaterialPageRoute(
-          //     builder: (context) => BreakingPage(data: args?['data']),
-          //   );
+          case '/break':
+            final args = settings.arguments as Map<String, dynamic>?;
+            return MaterialPageRoute(
+              builder: (context) => BreakingPage(data: args?['data']),
+            );
           // case '/rest':
           //   final args = settings.arguments as Map<String, dynamic>?;
           //   return MaterialPageRoute(
