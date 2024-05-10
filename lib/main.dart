@@ -23,11 +23,26 @@ class MainApp extends StatelessWidget {
           tertiary: Color(0xff0A0A0A),
         ),
       ),
-      routes: {
-        "/": (context) => HomePage(),
-        "/work": (context) => WorkingPage(),
-        "/break": (context) => BreakingPage(),
-        "/rest": (context) => RestingPage(),
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/work':
+            final args = settings.arguments as Map<String, dynamic>?;
+            return MaterialPageRoute(
+              builder: (context) => WorkingPage(data: args?['data']),
+            );
+          // case '/break':
+          //   final args = settings.arguments as Map<String, dynamic>?;
+          //   return MaterialPageRoute(
+          //     builder: (context) => BreakingPage(data: args?['data']),
+          //   );
+          // case '/rest':
+          //   final args = settings.arguments as Map<String, dynamic>?;
+          //   return MaterialPageRoute(
+          //     builder: (context) => RestingPage(data: args?['data']),
+          //   );
+          default:
+            return MaterialPageRoute(builder: (context) => HomePage());
+        }
       },
     );
   }

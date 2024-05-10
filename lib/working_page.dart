@@ -1,19 +1,53 @@
 import 'package:flutter/material.dart';
+import './timer.dart';
+import 'dart:async';
 
 class WorkingPage extends StatelessWidget {
-  const WorkingPage({super.key});
+  final int data;
+  const WorkingPage({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
-      body: const WorkingPageBody(),
+      body: WorkingPageBody(data: data),
     );
   }
 }
 
-class WorkingPageBody extends StatelessWidget {
-  const WorkingPageBody({super.key});
+class WorkingPageBody extends StatefulWidget {
+  final int data;
+  const WorkingPageBody({super.key, required this.data});
+
+  @override
+  State<WorkingPageBody> createState() => _WorkingPageBodyState();
+}
+
+class _WorkingPageBodyState extends State<WorkingPageBody> {
+  late String _minutes = "00";
+  late String _second = "00";
+
+  final PomodoroTimer _pomodoroTimer = PomodoroTimer();
+
+  void _updateTime(Timer) {
+    String _currentMinutes =
+        _pomodoroTimer.getCurrentMinutes().toString().padLeft(2, "0");
+    String _currentSeconds =
+        _pomodoroTimer.getCurrentSeconds().toString().padLeft(2, "0");
+
+    setState(() {
+      _minutes = _currentMinutes;
+      _second = _currentSeconds;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    var _data = widget.data;
+    _pomodoroTimer.startTimer(_data, TimerState.working);
+    Timer.periodic(const Duration(seconds: 1), _updateTime);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +94,7 @@ class WorkingPageBody extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    "25:00",
+                    "$_minutes:$_second",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontSize: 60,

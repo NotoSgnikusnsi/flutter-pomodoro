@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BreakingPage extends StatelessWidget {
-  const BreakingPage({super.key});
+  const BreakingPage({super.key, required data});
 
   @override
   Widget build(BuildContext context) {

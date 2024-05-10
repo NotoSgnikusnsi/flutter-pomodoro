@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RestingPage extends StatelessWidget {
-  const RestingPage({super.key});
+  const RestingPage({super.key, required data});
 
   @override
   Widget build(BuildContext context) {

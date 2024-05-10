@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -12,8 +14,39 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class HomePageBody extends StatelessWidget {
+class HomePageBody extends StatefulWidget {
   const HomePageBody({super.key});
+
+  @override
+  State<HomePageBody> createState() => _HomePageBodyState();
+}
+
+class _HomePageBodyState extends State<HomePageBody> {
+  int _initialMinutes = 25;
+
+  void _incrementMinutes() {
+    int _minutes = _initialMinutes;
+    if (_minutes >= 180) {
+      return;
+    } else {
+      _minutes += 5;
+    }
+    setState(() {
+      _initialMinutes = _minutes;
+    });
+  }
+
+  void _decrementMinutes() {
+    int _minutes = _initialMinutes;
+    if (_minutes <= 0) {
+      return;
+    } else {
+      _minutes -= 5;
+    }
+    setState(() {
+      _initialMinutes = _minutes;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +91,8 @@ class HomePageBody extends StatelessWidget {
                 style:
                     TextStyle(color: Theme.of(context).colorScheme.secondary),
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.only(top: 0, bottom: 0, right: 10, left: 10),
                   filled: true,
                   fillColor: Theme.of(context).colorScheme.primary,
                   border: OutlineInputBorder(
@@ -79,7 +114,7 @@ class HomePageBody extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: null,
+                      onPressed: _incrementMinutes,
                       icon: Icon(
                         Icons.arrow_drop_up,
                         color: Theme.of(context).colorScheme.secondary,
@@ -90,7 +125,7 @@ class HomePageBody extends StatelessWidget {
                       padding: EdgeInsets.all(5),
                     ),
                     Text(
-                      "25:00",
+                      "$_initialMinutes:00",
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
                         fontSize: 60,
@@ -103,7 +138,7 @@ class HomePageBody extends StatelessWidget {
                       padding: EdgeInsets.all(5),
                     ),
                     IconButton(
-                      onPressed: null,
+                      onPressed: _decrementMinutes,
                       icon: Icon(
                         Icons.arrow_drop_down,
                         color: Theme.of(context).colorScheme.secondary,
@@ -117,7 +152,10 @@ class HomePageBody extends StatelessWidget {
                 padding: EdgeInsets.all(10),
               ),
               TextButton(
-                onPressed: null,
+                onPressed: () {
+                  Navigator.pushNamed(context, "/work",
+                      arguments: {"data": _initialMinutes});
+                },
                 child: Text("START"),
                 style: ButtonStyle(
                   padding: MaterialStateProperty.all(
