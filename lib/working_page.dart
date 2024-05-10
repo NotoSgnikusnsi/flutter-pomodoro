@@ -24,6 +24,9 @@ class WorkingPageBody extends StatefulWidget {
 }
 
 class _WorkingPageBodyState extends State<WorkingPageBody> {
+  late int _initialMinutes;
+  late Timer? _timer;
+  bool _timerState = true;
   late String _minutes = "00";
   late String _second = "00";
 
@@ -34,6 +37,12 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
         _pomodoroTimer.getCurrentMinutes().toString().padLeft(2, "0");
     String _currentSeconds =
         _pomodoroTimer.getCurrentSeconds().toString().padLeft(2, "0");
+    if (_currentMinutes == "00" && _currentSeconds == "00") {
+      _pomodoroTimer.stopTimer();
+      _timer?.cancel();
+      Navigator.pushNamed(context, "/break",
+          arguments: {"data": _initialMinutes});
+    }
 
     setState(() {
       _minutes = _currentMinutes;
@@ -44,9 +53,9 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
   @override
   void initState() {
     super.initState();
-    var _data = widget.data;
-    _pomodoroTimer.startTimer(_data, TimerState.working);
-    Timer.periodic(const Duration(seconds: 1), _updateTime);
+    _initialMinutes = widget.data;
+    _pomodoroTimer.startTimer(_initialMinutes, TimerState.working);
+    _timer = Timer.periodic(const Duration(seconds: 1), _updateTime);
   }
 
   @override
@@ -106,9 +115,17 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
                 ),
               ),
               IconButton(
-                onPressed: null,
+                onPressed: () {
+                  if (_timerState) {
+                    _pomodoroTimer.stopTimer();
+                    _timerState = false;
+                  } else {
+                    _pomodoroTimer.startTimer(0, TimerState.working);
+                    _timerState = true;
+                  }
+                },
                 icon: Icon(
-                  Icons.pause,
+                  _timerState ? Icons.pause : Icons.play_arrow,
                   color: Theme.of(context).colorScheme.secondary,
                   size: 60,
                 ),
