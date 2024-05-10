@@ -25,18 +25,14 @@ class WorkingPageBody extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextField(
-                cursorColor: Theme.of(context).colorScheme.primary,
-                style: TextStyle(color: Theme.of(context).colorScheme.primary),
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.only(
-                      top: 0, bottom: 0, right: 10, left: 10),
-                  hintText: "You are doing so now.",
-                  filled: true,
-                  fillColor: Theme.of(context).colorScheme.secondary,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+              Text(
+                "ポモドーロのアプリを作る",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: 30,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.bold,
+                  height: 0,
                 ),
               ),
               const Padding(

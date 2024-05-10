@@ -24,7 +24,7 @@ class MainApp extends StatelessWidget {
         ),
       ),
       routes: {
-        "/": (context) => RestingPage(),
+        "/": (context) => WorkingPage(),
         "/work": (context) => WorkingPage(),
         "/break": (context) => BreakingPage(),
         "/rest": (context) => RestingPage(),
