@@ -54,83 +54,89 @@ class _BreakingPageBodyState extends State<BreakingPageBody> {
     super.initState();
     _initialMinutes = widget.data;
     _pomodoroTimer.startTimer(_initialMinutes, TimerState.breaking);
-    _timer = Timer.periodic(const Duration(seconds: 1), _updateTime);
+    _timer = Timer.periodic(const Duration(seconds: 0), _updateTime);
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(40.0),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.85,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "ポモドーロのアプリを作る",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
-                  fontSize: 30,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.bold,
-                  height: 0,
-                ),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.85,
+        height: MediaQuery.of(context).size.height * 0.9,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              onPressed: () {
+                _pomodoroTimer.resetTimer();
+                _timer?.cancel();
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.cancel_rounded),
+            ),
+            Text(
+              "ポモドーロのアプリを作る",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: 24,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.bold,
+                height: 0,
               ),
-              const Padding(
-                padding: EdgeInsets.all(50.0),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.1,
+            ),
+            Text(
+              "breaking",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: 24,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.bold,
+                height: 0,
               ),
-              Text(
-                "breaking",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
-                  fontSize: 24,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.bold,
-                  height: 0,
-                ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(10.0),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.85,
+              height: MediaQuery.of(context).size.height * 0.3,
+              decoration: BoxDecoration(
+                color: const Color(0xff518DF0),
+                borderRadius: BorderRadius.circular(10),
               ),
-              const Padding(
-                padding: EdgeInsets.all(10.0),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.85,
-                height: MediaQuery.of(context).size.height * 0.3,
-                decoration: BoxDecoration(
-                  color: const Color(0xff518DF0),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Center(
-                  child: Text(
-                    "$_minutes:$_second",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontSize: 60,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.bold,
-                      height: 0,
-                    ),
+              child: Center(
+                child: Text(
+                  "$_minutes:$_second",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontSize: 60,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.bold,
+                    height: 0,
                   ),
                 ),
               ),
-              IconButton(
-                onPressed: () {
-                  if (_timerState) {
-                    _pomodoroTimer.stopTimer();
-                    _timerState = false;
-                  } else {
-                    _pomodoroTimer.startTimer(0, TimerState.breaking);
-                    _timerState = true;
-                  }
-                },
-                icon: Icon(
-                  _timerState ? Icons.pause : Icons.play_arrow,
-                  color: Theme.of(context).colorScheme.secondary,
-                  size: 60,
-                ),
+            ),
+            IconButton(
+              onPressed: () {
+                if (_timerState) {
+                  _pomodoroTimer.stopTimer();
+                  _timerState = false;
+                } else {
+                  _pomodoroTimer.startTimer(0, TimerState.breaking);
+                  _timerState = true;
+                }
+              },
+              icon: Icon(
+                _timerState ? Icons.pause : Icons.play_arrow,
+                color: Theme.of(context).colorScheme.secondary,
+                size: 60,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
