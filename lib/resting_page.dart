@@ -76,8 +76,8 @@ class _RestingPageBodyState extends State<RestingPageBody> {
                 height: 0,
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(50.0),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.1,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
