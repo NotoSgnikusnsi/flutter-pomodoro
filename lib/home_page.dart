@@ -91,6 +91,11 @@ class _HomePageBodyState extends State<HomePageBody> {
                 color: Theme.of(context).colorScheme.secondary,
               ),
               decoration: InputDecoration(
+                hintStyle: TextStyle(
+                  color:
+                      Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+                ),
+                hintText: "I do ...",
                 contentPadding:
                     EdgeInsets.only(top: 0, bottom: 0, right: 10, left: 10),
                 filled: true,
