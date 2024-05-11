@@ -27,5 +27,5 @@ flutter:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/images/pomodoro-icon.png"
+  image_path: "assets/images/icon.png"
   adaptive_icon_background: "#ffffff"
