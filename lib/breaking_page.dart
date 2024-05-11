@@ -142,7 +142,7 @@ class _BreakingPageBodyState extends State<BreakingPageBody> {
                   ),
                 ),
                 Text(
-                  "Breaking",
+                  "Break",
                   style: Theme.of(context).textTheme.displayMedium?.copyWith(
                         color: Theme.of(context).colorScheme.secondary,
                       ),

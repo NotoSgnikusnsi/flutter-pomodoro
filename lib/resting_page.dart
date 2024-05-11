@@ -142,7 +142,7 @@ class _RestingPageBodyState extends State<RestingPageBody> {
                   ),
                 ),
                 Text(
-                  "Resting",
+                  "Rest",
                   style: Theme.of(context).textTheme.displayMedium?.copyWith(
                         color: Theme.of(context).colorScheme.secondary,
                       ),
