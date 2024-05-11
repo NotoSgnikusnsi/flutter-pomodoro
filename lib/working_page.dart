@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pomodoro/padding.dart';
 import 'dart:async';
+import 'package:audioplayers/audioplayers.dart';
 
 import 'package:flutter_pomodoro/timer.dart';
 
@@ -28,6 +29,7 @@ class WorkingPageBody extends StatefulWidget {
 }
 
 class _WorkingPageBodyState extends State<WorkingPageBody> {
+  final AudioPlayer _audioPlayer = AudioPlayer();
   late String _todoMessage;
   late int _initialMinutes;
   late Timer? _changeTimerState;
@@ -81,12 +83,14 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
     if (count >= 4) {
       count = 0;
       // Navigator.pushNamedをawaitで待機
+      await _audioPlayer.play(AssetSource("sounds/rest.mp3"));
       message = await Navigator.pushNamed(
         context,
         "/rest",
         arguments: {"data": _initialMinutes, "todo": _todoMessage},
       );
     } else {
+      await _audioPlayer.play(AssetSource("sounds/break.mp3"));
       message = await Navigator.pushNamed(
         context,
         "/break",
@@ -94,6 +98,7 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
       );
     }
     // 新しいページから戻ってきた後の処理
+    await _audioPlayer.play(AssetSource("sounds/working.mp3"));
     _pomodoroTimer = PomodoroTimer();
     _pomodoroTimer.startTimer(_initialMinutes, TimerState.working);
     _changeTimerState = Timer.periodic(const Duration(seconds: 1), _updateTime);
