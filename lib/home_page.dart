@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:PomTimer/padding.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -24,6 +25,17 @@ class HomePageBody extends StatefulWidget {
 class _HomePageBodyState extends State<HomePageBody> {
   int _initialMinutes = 25;
   final TextEditingController _todoMessage = TextEditingController();
+
+  void initialization() async {
+    await Future.delayed(const Duration(seconds: 1));
+    FlutterNativeSplash.remove();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initialization();
+  }
 
   void _incrementMinutes() {
     int _minutes = _initialMinutes;
