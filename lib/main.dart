@@ -22,23 +22,52 @@ class MainApp extends StatelessWidget {
           secondary: Color(0xffFBF4F4),
           tertiary: Color(0xff0A0A0A),
         ),
+        textTheme: const TextTheme(
+          displayLarge: TextStyle(
+            fontSize: 60,
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.bold,
+            height: 0,
+          ),
+          displayMedium: TextStyle(
+            fontSize: 24,
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.bold,
+            height: 0,
+          ),
+          displaySmall: TextStyle(
+            fontSize: 20,
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w300,
+            height: 0,
+          ),
+        ),
       ),
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/work':
             final args = settings.arguments as Map<String, dynamic>?;
             return MaterialPageRoute(
-              builder: (context) => WorkingPage(data: args?['data']),
+              builder: (context) => WorkingPage(
+                data: args?['data'],
+                todo: args?['todo'],
+              ),
             );
           case '/break':
             final args = settings.arguments as Map<String, dynamic>?;
             return MaterialPageRoute(
-              builder: (context) => BreakingPage(data: args?['data']),
+              builder: (context) => BreakingPage(
+                data: args?['data'],
+                todo: args?['todo'],
+              ),
             );
           case '/rest':
             final args = settings.arguments as Map<String, dynamic>?;
             return MaterialPageRoute(
-              builder: (context) => RestingPage(data: args?['data']),
+              builder: (context) => RestingPage(
+                data: args?['data'],
+                todo: args?['todo'],
+              ),
             );
           default:
             return MaterialPageRoute(
