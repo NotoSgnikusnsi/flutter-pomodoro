@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_pomodoro/padding.dart';
 
 class HomePage extends StatelessWidget {
@@ -82,6 +83,9 @@ class _HomePageBodyState extends State<HomePageBody> {
             ),
             DefaultSpace(),
             TextField(
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(50),
+              ],
               cursorColor: Theme.of(context).colorScheme.secondary,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
