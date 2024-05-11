@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_pomodoro/padding.dart';
 import 'dart:async';
 
@@ -6,27 +7,30 @@ import 'package:flutter_pomodoro/timer.dart';
 
 class RestingPage extends StatelessWidget {
   final int data;
-  const RestingPage({super.key, required this.data, required todo});
+  final String todo;
+  const RestingPage({super.key, required this.data, required this.todo});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
-      body: RestingPageBody(data: data),
+      body: RestingPageBody(data: data, todo: todo),
     );
   }
 }
 
 class RestingPageBody extends StatefulWidget {
   final int data;
-  const RestingPageBody({super.key, required this.data});
+  final String todo;
+  const RestingPageBody({super.key, required this.data, required this.todo});
 
   @override
   State<RestingPageBody> createState() => _RestingPageBodyState();
 }
 
 class _RestingPageBodyState extends State<RestingPageBody> {
-  late String _todo;
+  late String _todoMessage;
+  final TextEditingController _newTodoMessage = TextEditingController();
   late int _initialMinutes;
   late Timer? _changeTimerState;
   late String _minutes = "";
@@ -38,6 +42,7 @@ class _RestingPageBodyState extends State<RestingPageBody> {
   void initState() {
     super.initState();
     _initialMinutes = widget.data;
+    _todoMessage = widget.todo;
     _pomodoroTimer.startTimer(_initialMinutes, TimerState.resting);
     _changeTimerState = Timer.periodic(const Duration(seconds: 1), _updateTime);
   }
@@ -68,8 +73,14 @@ class _RestingPageBodyState extends State<RestingPageBody> {
   }
 
   void _goBackPage(BuildContext context) {
+    String message = "";
     _resetAllTimer();
-    Navigator.pop(context);
+    if (_newTodoMessage.text == "") {
+      message = _todoMessage;
+    } else {
+      message = _newTodoMessage.text;
+    }
+    Navigator.pop(context, message);
   }
 
   void _updateTime(Timer timer) {
@@ -96,11 +107,25 @@ class _RestingPageBodyState extends State<RestingPageBody> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              "ポモドーロのアプリを作る",
-              style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
+            TextField(
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(50),
+              ],
+              cursorColor: Theme.of(context).colorScheme.primary,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              decoration: InputDecoration(
+                hintText: "$_todoMessage",
+                contentPadding:
+                    EdgeInsets.only(top: 0, bottom: 0, right: 10, left: 10),
+                filled: true,
+                fillColor: Theme.of(context).colorScheme.secondary,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              controller: _newTodoMessage,
             ),
             DefaultSpace(),
             Row(
