@@ -82,7 +82,6 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
     var message;
     if (count >= 4) {
       count = 0;
-      // Navigator.pushNamedをawaitで待機
       await _audioPlayer.play(AssetSource("sounds/rest.mp3"));
       message = await Navigator.pushNamed(
         context,

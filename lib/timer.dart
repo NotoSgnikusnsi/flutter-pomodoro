@@ -19,10 +19,10 @@ class PomodoroTimer {
           _initialMinutes = minutes;
           break;
         case TimerState.breaking:
-          _initialMinutes = minutes ~/ 5; // 初期値を5で割る（整数除算）
+          _initialMinutes = minutes ~/ 5;
           break;
         case TimerState.resting:
-          _initialMinutes = minutes ~/ 5 * 8; // restingの場合も初期値をそのまま使用
+          _initialMinutes = minutes ~/ 5 * 8;
           break;
       }
 
