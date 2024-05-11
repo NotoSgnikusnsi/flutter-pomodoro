@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_pomodoro/padding.dart';
+import 'package:PomTimer/padding.dart';
 import 'dart:async';
 
-import 'package:flutter_pomodoro/timer.dart';
+import 'package:PomTimer/timer.dart';
 
 class RestingPage extends StatelessWidget {
   final int data;

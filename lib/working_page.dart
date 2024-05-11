@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pomodoro/padding.dart';
+import 'package:PomTimer/padding.dart';
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 
-import 'package:flutter_pomodoro/timer.dart';
+import 'package:PomTimer/timer.dart';
 
 class WorkingPage extends StatelessWidget {
   final int data;

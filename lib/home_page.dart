@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_pomodoro/padding.dart';
+import 'package:PomTimer/padding.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -70,7 +70,7 @@ class _HomePageBodyState extends State<HomePageBody> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Pomodoro",
+                  "PomTimer",
                   style: Theme.of(context).textTheme.displayMedium,
                 ),
                 Text(

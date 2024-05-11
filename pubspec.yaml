@@ -1,4 +1,4 @@
-name: flutter_pomodoro
+name: PomTimer
 description: "Pomodoro Timer"
 publish_to: 'none'
 version: 0.1.0
