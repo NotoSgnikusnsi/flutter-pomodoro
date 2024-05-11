@@ -66,14 +66,6 @@ class _BreakingPageBodyState extends State<BreakingPageBody> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconButton(
-              onPressed: () {
-                _pomodoroTimer.resetTimer();
-                _timer?.cancel();
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.cancel_rounded),
-            ),
             Text(
               "ポモドーロのアプリを作る",
               style: TextStyle(
@@ -87,15 +79,40 @@ class _BreakingPageBodyState extends State<BreakingPageBody> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.1,
             ),
-            Text(
-              "breaking",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-                fontSize: 24,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.bold,
-                height: 0,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    _pomodoroTimer.resetTimer();
+                    _timer?.cancel();
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(
+                    Icons.arrow_left,
+                    color: Theme.of(context).colorScheme.secondary,
+                    size: 32,
+                  ),
+                ),
+                Text(
+                  "Breaking",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontSize: 24,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.bold,
+                    height: 0,
+                  ),
+                ),
+                IconButton(
+                  onPressed: null,
+                  icon: Icon(
+                    Icons.arrow_right,
+                    color: Theme.of(context).colorScheme.tertiary,
+                    size: 32,
+                  ),
+                ),
+              ],
             ),
             const Padding(
               padding: EdgeInsets.all(10.0),

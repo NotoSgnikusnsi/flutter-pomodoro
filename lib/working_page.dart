@@ -90,15 +90,6 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconButton(
-              onPressed: () {
-                _pomodoroTimer.resetTimer();
-                _timer?.cancel();
-                count = 0;
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.cancel_rounded),
-            ),
             Text(
               "ポモドーロのアプリを作る",
               style: TextStyle(
@@ -112,15 +103,71 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.1,
             ),
-            Text(
-              "Working",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-                fontSize: 24,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.bold,
-                height: 0,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    _pomodoroTimer.resetTimer();
+                    _timer?.cancel();
+                    count = 0;
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(
+                    Icons.arrow_left,
+                    color: Theme.of(context).colorScheme.secondary,
+                    size: 32,
+                  ),
+                ),
+                Text(
+                  "Working",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontSize: 24,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.bold,
+                    height: 0,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    _pomodoroTimer.resetTimer();
+                    _timer?.cancel();
+                    count++;
+                    if (count >= 4) {
+                      count = 0;
+                      Navigator.pushNamed(context, "/rest",
+                          arguments: {"data": _initialMinutes}).then(
+                        (value) {
+                          _pomodoroTimer = PomodoroTimer();
+                          _pomodoroTimer.startTimer(
+                              _initialMinutes, TimerState.working);
+                          _timer = Timer.periodic(
+                              const Duration(seconds: 1), _updateTime);
+                          print("count: $count");
+                        },
+                      );
+                    } else {
+                      Navigator.pushNamed(context, "/break",
+                          arguments: {"data": _initialMinutes}).then(
+                        (value) {
+                          _pomodoroTimer = PomodoroTimer();
+                          _pomodoroTimer.startTimer(
+                              _initialMinutes, TimerState.working);
+                          _timer = Timer.periodic(
+                              const Duration(seconds: 0), _updateTime);
+                          print("count: $count");
+                        },
+                      );
+                    }
+                  },
+                  icon: Icon(
+                    Icons.arrow_right,
+                    color: Theme.of(context).colorScheme.secondary,
+                    size: 32,
+                  ),
+                ),
+              ],
             ),
             const Padding(
               padding: EdgeInsets.all(10.0),
