@@ -50,7 +50,7 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
           (value) {
             _pomodoroTimer = PomodoroTimer();
             _pomodoroTimer.startTimer(_initialMinutes, TimerState.working);
-            timer = Timer.periodic(const Duration(seconds: 1), _updateTime);
+            timer = Timer.periodic(const Duration(seconds: 0), _updateTime);
             print("count: $count");
           },
         );
@@ -143,7 +143,10 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
                           _pomodoroTimer.startTimer(
                               _initialMinutes, TimerState.working);
                           _timer = Timer.periodic(
-                              const Duration(seconds: 1), _updateTime);
+                              const Duration(seconds: 0), _updateTime);
+                          setState(() {
+                            _timerState = true;
+                          });
                           print("count: $count");
                         },
                       );
@@ -156,6 +159,9 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
                               _initialMinutes, TimerState.working);
                           _timer = Timer.periodic(
                               const Duration(seconds: 0), _updateTime);
+                          setState(() {
+                            _timerState = true;
+                          });
                           print("count: $count");
                         },
                       );
