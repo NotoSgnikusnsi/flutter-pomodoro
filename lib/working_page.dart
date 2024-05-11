@@ -77,16 +77,17 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
   Future<void> _goToNextPage(BuildContext context) async {
     _resetAllTimer();
     count++;
+    var message;
     if (count >= 4) {
       count = 0;
       // Navigator.pushNamedをawaitで待機
-      await Navigator.pushNamed(
+      message = await Navigator.pushNamed(
         context,
         "/rest",
         arguments: {"data": _initialMinutes, "todo": _todoMessage},
       );
     } else {
-      await Navigator.pushNamed(
+      message = await Navigator.pushNamed(
         context,
         "/break",
         arguments: {"data": _initialMinutes, "todo": _todoMessage},
@@ -96,7 +97,9 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
     _pomodoroTimer = PomodoroTimer();
     _pomodoroTimer.startTimer(_initialMinutes, TimerState.working);
     _changeTimerState = Timer.periodic(const Duration(seconds: 1), _updateTime);
-    setState(() {});
+    setState(() {
+      _todoMessage = message;
+    });
     print("count: $count");
   }
 

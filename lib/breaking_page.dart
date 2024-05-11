@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_pomodoro/padding.dart';
 import 'dart:async';
 
@@ -29,6 +30,7 @@ class BreakingPageBody extends StatefulWidget {
 
 class _BreakingPageBodyState extends State<BreakingPageBody> {
   late String _todoMessage;
+  final TextEditingController _newTodoMessage = TextEditingController();
   late int _initialMinutes;
   late Timer? _changeTimerState;
   late String _minutes = "";
@@ -71,8 +73,14 @@ class _BreakingPageBodyState extends State<BreakingPageBody> {
   }
 
   void _goBackPage(BuildContext context) {
+    String message = "";
     _resetAllTimer();
-    Navigator.pop(context);
+    if (_newTodoMessage.text == "") {
+      message = _todoMessage;
+    } else {
+      message = _newTodoMessage.text;
+    }
+    Navigator.pop(context, message);
   }
 
   void _updateTime(Timer timer) {
@@ -99,11 +107,25 @@ class _BreakingPageBodyState extends State<BreakingPageBody> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              _todoMessage,
-              style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
+            TextField(
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(50),
+              ],
+              cursorColor: Theme.of(context).colorScheme.primary,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              decoration: InputDecoration(
+                hintText: "$_todoMessage",
+                contentPadding:
+                    EdgeInsets.only(top: 0, bottom: 0, right: 10, left: 10),
+                filled: true,
+                fillColor: Theme.of(context).colorScheme.secondary,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              controller: _newTodoMessage,
             ),
             DefaultSpace(),
             Row(
