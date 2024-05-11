@@ -6,27 +6,29 @@ import 'package:flutter_pomodoro/timer.dart';
 
 class BreakingPage extends StatelessWidget {
   final int data;
-  const BreakingPage({super.key, required this.data, required todo});
+  final String todo;
+  const BreakingPage({super.key, required this.data, required this.todo});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
-      body: BreakingPageBody(data: data),
+      body: BreakingPageBody(data: data, todo: todo),
     );
   }
 }
 
 class BreakingPageBody extends StatefulWidget {
   final int data;
-  const BreakingPageBody({super.key, required this.data});
+  final String todo;
+  const BreakingPageBody({super.key, required this.data, required this.todo});
 
   @override
   State<BreakingPageBody> createState() => _BreakingPageBodyState();
 }
 
 class _BreakingPageBodyState extends State<BreakingPageBody> {
-  late String _todo;
+  late String _todoMessage;
   late int _initialMinutes;
   late Timer? _changeTimerState;
   late String _minutes = "";
@@ -38,6 +40,7 @@ class _BreakingPageBodyState extends State<BreakingPageBody> {
   void initState() {
     super.initState();
     _initialMinutes = widget.data;
+    _todoMessage = widget.todo;
     _pomodoroTimer.startTimer(_initialMinutes, TimerState.breaking);
     _changeTimerState = Timer.periodic(const Duration(seconds: 1), _updateTime);
   }
@@ -97,7 +100,7 @@ class _BreakingPageBodyState extends State<BreakingPageBody> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "ポモドーロのアプリを作る",
+              _todoMessage,
               style: Theme.of(context).textTheme.displayMedium?.copyWith(
                     color: Theme.of(context).colorScheme.secondary,
                   ),

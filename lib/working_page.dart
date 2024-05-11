@@ -28,7 +28,7 @@ class WorkingPageBody extends StatefulWidget {
 }
 
 class _WorkingPageBodyState extends State<WorkingPageBody> {
-  late String _todo;
+  late String _todoMessage;
   late int _initialMinutes;
   late Timer? _changeTimerState;
   late String _minutes = "";
@@ -42,7 +42,7 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
   void initState() {
     super.initState();
     _initialMinutes = widget.data;
-    _todo = widget.todo;
+    _todoMessage = widget.todo;
     _pomodoroTimer.startTimer(
         _initialMinutes, TimerState.working); // Pomodoroタイマーをスタートする
     _changeTimerState = Timer.periodic(const Duration(seconds: 1),
@@ -80,11 +80,17 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
     if (count >= 4) {
       count = 0;
       // Navigator.pushNamedをawaitで待機
-      await Navigator.pushNamed(context, "/rest",
-          arguments: {"data": _initialMinutes});
+      await Navigator.pushNamed(
+        context,
+        "/rest",
+        arguments: {"data": _initialMinutes, "todo": _todoMessage},
+      );
     } else {
-      await Navigator.pushNamed(context, "/break",
-          arguments: {"data": _initialMinutes});
+      await Navigator.pushNamed(
+        context,
+        "/break",
+        arguments: {"data": _initialMinutes, "todo": _todoMessage},
+      );
     }
     // 新しいページから戻ってきた後の処理
     _pomodoroTimer = PomodoroTimer();
@@ -125,7 +131,7 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              _todo,
+              _todoMessage,
               style: Theme.of(context).textTheme.displayMedium?.copyWith(
                     color: Theme.of(context).colorScheme.secondary,
                   ),
