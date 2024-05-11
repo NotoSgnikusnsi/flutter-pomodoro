@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_pomodoro/padding.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -23,6 +24,7 @@ class HomePageBody extends StatefulWidget {
 
 class _HomePageBodyState extends State<HomePageBody> {
   int _initialMinutes = 25;
+  final TextEditingController _todoMessage = TextEditingController();
 
   void _incrementMinutes() {
     int _minutes = _initialMinutes;
@@ -48,6 +50,14 @@ class _HomePageBodyState extends State<HomePageBody> {
     });
   }
 
+  void _goToTimerPage() {
+    Navigator.pushNamed(
+      context,
+      "/work",
+      arguments: {"data": _initialMinutes, "todo": _todoMessage.text},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -62,32 +72,20 @@ class _HomePageBodyState extends State<HomePageBody> {
               children: [
                 Text(
                   "Pomodoro",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontSize: 24,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.bold,
-                    height: 0,
-                  ),
+                  style: Theme.of(context).textTheme.displayMedium,
                 ),
                 Text(
                   "What are you going to do now?",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontSize: 20,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w300,
-                    height: 0,
-                  ),
+                  style: Theme.of(context).textTheme.displaySmall,
                 ),
               ],
             ),
-            const Padding(
-              padding: EdgeInsets.all(10),
-            ),
+            DefaultSpace(),
             TextField(
               cursorColor: Theme.of(context).colorScheme.secondary,
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
               decoration: InputDecoration(
                 contentPadding:
                     EdgeInsets.only(top: 0, bottom: 0, right: 10, left: 10),
@@ -97,10 +95,9 @@ class _HomePageBodyState extends State<HomePageBody> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
+              controller: _todoMessage,
             ),
-            const Padding(
-              padding: EdgeInsets.all(10),
-            ),
+            DefaultSpace(),
             Container(
               width: MediaQuery.of(context).size.width * 0.85,
               height: MediaQuery.of(context).size.height * 0.3,
@@ -119,22 +116,14 @@ class _HomePageBodyState extends State<HomePageBody> {
                       size: 40,
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.all(5),
-                  ),
+                  DefaultSpace(),
                   Text(
                     "$_initialMinutes:00",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontSize: 60,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.bold,
-                      height: 0,
-                    ),
+                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.all(5),
-                  ),
+                  DefaultSpace(),
                   IconButton(
                     onPressed: _decrementMinutes,
                     icon: Icon(
@@ -146,14 +135,9 @@ class _HomePageBodyState extends State<HomePageBody> {
                 ],
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(10),
-            ),
+            DefaultSpace(),
             TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, "/work",
-                    arguments: {"data": _initialMinutes});
-              },
+              onPressed: _goToTimerPage,
               child: Text("START"),
               style: ButtonStyle(
                 padding: MaterialStateProperty.all(
@@ -166,13 +150,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                   Theme.of(context).colorScheme.secondary,
                 ),
                 textStyle: MaterialStateProperty.all(
-                  TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontSize: 24,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.bold,
-                    height: 0,
-                  ),
+                  Theme.of(context).textTheme.displayMedium,
                 ),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(

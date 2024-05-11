@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import './timer.dart';
+import 'package:flutter_pomodoro/padding.dart';
 import 'dart:async';
+
+import 'package:flutter_pomodoro/timer.dart';
 
 class RestingPage extends StatelessWidget {
   final int data;
-  const RestingPage({super.key, required this.data});
+  const RestingPage({super.key, required this.data, required todo});
 
   @override
   Widget build(BuildContext context) {
@@ -24,37 +26,65 @@ class RestingPageBody extends StatefulWidget {
 }
 
 class _RestingPageBodyState extends State<RestingPageBody> {
+  late String _todo;
   late int _initialMinutes;
-  late Timer? _timer;
-  bool _timerState = true;
+  late Timer? _changeTimerState;
   late String _minutes = "";
   late String _second = "";
 
   final PomodoroTimer _pomodoroTimer = PomodoroTimer();
-
-  void _updateTime(Timer) {
-    String _currentMinutes =
-        _pomodoroTimer.getCurrentMinutes().toString().padLeft(2, "0");
-    String _currentSeconds =
-        _pomodoroTimer.getCurrentSeconds().toString().padLeft(2, "0");
-    if (_currentMinutes == "00" && _currentSeconds == "00") {
-      _pomodoroTimer.stopTimer();
-      _timer?.cancel();
-      Navigator.pop(context);
-    }
-
-    setState(() {
-      _minutes = _currentMinutes;
-      _second = _currentSeconds;
-    });
-  }
 
   @override
   void initState() {
     super.initState();
     _initialMinutes = widget.data;
     _pomodoroTimer.startTimer(_initialMinutes, TimerState.resting);
-    _timer = Timer.periodic(const Duration(seconds: 0), _updateTime);
+    _changeTimerState = Timer.periodic(const Duration(seconds: 1), _updateTime);
+  }
+
+  @override
+  void dispose() {
+    _pomodoroTimer.resetTimer();
+    _changeTimerState?.cancel();
+    super.dispose();
+  }
+
+  void _setTimerState() {
+    if (_changeTimerState!.isActive) {
+      _pomodoroTimer.stopTimer();
+      _changeTimerState?.cancel();
+    } else {
+      _pomodoroTimer.startTimer(0, TimerState.working);
+      _changeTimerState =
+          Timer.periodic(const Duration(seconds: 1), _updateTime);
+    }
+
+    setState(() {});
+  }
+
+  void _resetAllTimer() {
+    _pomodoroTimer.resetTimer();
+    _changeTimerState?.cancel();
+  }
+
+  void _goBackPage(BuildContext context) {
+    _resetAllTimer();
+    Navigator.pop(context);
+  }
+
+  void _updateTime(Timer timer) {
+    String _currentMinutes =
+        _pomodoroTimer.getCurrentMinutes().toString().padLeft(2, "0");
+    String _currentSeconds =
+        _pomodoroTimer.getCurrentSeconds().toString().padLeft(2, "0");
+    if (_currentMinutes == "00" && _currentSeconds == "00") {
+      _goBackPage(context);
+    }
+
+    setState(() {
+      _minutes = _currentMinutes;
+      _second = _currentSeconds;
+    });
   }
 
   @override
@@ -68,25 +98,17 @@ class _RestingPageBodyState extends State<RestingPageBody> {
           children: [
             Text(
               "ポモドーロのアプリを作る",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-                fontSize: 24,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.bold,
-                height: 0,
-              ),
+              style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.1,
-            ),
+            DefaultSpace(),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
                   onPressed: () {
-                    _pomodoroTimer.resetTimer();
-                    _timer?.cancel();
-                    Navigator.pop(context);
+                    _goBackPage(context);
                   },
                   icon: Icon(
                     Icons.arrow_left,
@@ -96,13 +118,9 @@ class _RestingPageBodyState extends State<RestingPageBody> {
                 ),
                 Text(
                   "Resting",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontSize: 24,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.bold,
-                    height: 0,
-                  ),
+                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
                 ),
                 IconButton(
                   onPressed: null,
@@ -114,9 +132,7 @@ class _RestingPageBodyState extends State<RestingPageBody> {
                 ),
               ],
             ),
-            const Padding(
-              padding: EdgeInsets.all(10.0),
-            ),
+            DefaultSpace(),
             Container(
               width: MediaQuery.of(context).size.width * 0.85,
               height: MediaQuery.of(context).size.height * 0.3,
@@ -127,28 +143,18 @@ class _RestingPageBodyState extends State<RestingPageBody> {
               child: Center(
                 child: Text(
                   "$_minutes:$_second",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontSize: 60,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.bold,
-                    height: 0,
-                  ),
+                  style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
                 ),
               ),
             ),
             IconButton(
               onPressed: () {
-                if (_timerState) {
-                  _pomodoroTimer.stopTimer();
-                  _timerState = false;
-                } else {
-                  _pomodoroTimer.startTimer(0, TimerState.resting);
-                  _timerState = true;
-                }
+                _setTimerState();
               },
               icon: Icon(
-                _timerState ? Icons.pause : Icons.play_arrow,
+                _changeTimerState!.isActive ? Icons.pause : Icons.play_arrow,
                 color: Theme.of(context).colorScheme.secondary,
                 size: 60,
               ),

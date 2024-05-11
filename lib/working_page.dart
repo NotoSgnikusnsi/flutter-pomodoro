@@ -1,32 +1,36 @@
 import 'package:flutter/material.dart';
-import './timer.dart';
+import 'package:flutter_pomodoro/padding.dart';
 import 'dart:async';
+
+import 'package:flutter_pomodoro/timer.dart';
 
 class WorkingPage extends StatelessWidget {
   final int data;
-  const WorkingPage({super.key, required this.data});
+  final String todo;
+  const WorkingPage({super.key, required this.data, required this.todo});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
-      body: WorkingPageBody(data: data),
+      body: WorkingPageBody(data: data, todo: todo),
     );
   }
 }
 
 class WorkingPageBody extends StatefulWidget {
   final int data;
-  const WorkingPageBody({super.key, required this.data});
+  final String todo;
+  const WorkingPageBody({super.key, required this.data, required this.todo});
 
   @override
   State<WorkingPageBody> createState() => _WorkingPageBodyState();
 }
 
 class _WorkingPageBodyState extends State<WorkingPageBody> {
+  late String _todo;
   late int _initialMinutes;
-  late Timer? _timer;
-  bool _timerState = true;
+  late Timer? _changeTimerState;
   late String _minutes = "";
   late String _second = "";
 
@@ -34,51 +38,81 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
 
   PomodoroTimer _pomodoroTimer = PomodoroTimer();
 
+  @override
+  void initState() {
+    super.initState();
+    _initialMinutes = widget.data;
+    _todo = widget.todo;
+    _pomodoroTimer.startTimer(
+        _initialMinutes, TimerState.working); // Pomodoroタイマーをスタートする
+    _changeTimerState = Timer.periodic(const Duration(seconds: 1),
+        _updateTime); // Pomodoroタイマーの値が変更されるように画面を再描写する。
+  }
+
+  @override
+  void dispose() {
+    _pomodoroTimer.resetTimer();
+    _changeTimerState?.cancel();
+    super.dispose();
+  }
+
+  void _setTimerState() {
+    if (_changeTimerState!.isActive) {
+      _pomodoroTimer.stopTimer();
+      _changeTimerState?.cancel();
+    } else {
+      _pomodoroTimer.startTimer(0, TimerState.working);
+      _changeTimerState =
+          Timer.periodic(const Duration(seconds: 1), _updateTime);
+    }
+
+    setState(() {});
+  }
+
+  void _resetAllTimer() {
+    _pomodoroTimer.resetTimer();
+    _changeTimerState?.cancel();
+  }
+
+  Future<void> _goToNextPage(BuildContext context) async {
+    _resetAllTimer();
+    count++;
+    if (count >= 4) {
+      count = 0;
+      // Navigator.pushNamedをawaitで待機
+      await Navigator.pushNamed(context, "/rest",
+          arguments: {"data": _initialMinutes});
+    } else {
+      await Navigator.pushNamed(context, "/break",
+          arguments: {"data": _initialMinutes});
+    }
+    // 新しいページから戻ってきた後の処理
+    _pomodoroTimer = PomodoroTimer();
+    _pomodoroTimer.startTimer(_initialMinutes, TimerState.working);
+    _changeTimerState = Timer.periodic(const Duration(seconds: 1), _updateTime);
+    setState(() {});
+    print("count: $count");
+  }
+
+  void _goBackPage(BuildContext context) {
+    _resetAllTimer();
+    count = 0;
+    Navigator.pop(context);
+  }
+
   void _updateTime(Timer timer) {
     String _currentMinutes =
         _pomodoroTimer.getCurrentMinutes().toString().padLeft(2, "0");
     String _currentSeconds =
         _pomodoroTimer.getCurrentSeconds().toString().padLeft(2, "0");
     if (_currentMinutes == "00" && _currentSeconds == "00") {
-      _pomodoroTimer.stopTimer();
-      timer.cancel();
-      count++;
-      if (count >= 4) {
-        count = 0;
-        Navigator.pushNamed(context, "/rest",
-            arguments: {"data": _initialMinutes}).then(
-          (value) {
-            _pomodoroTimer = PomodoroTimer();
-            _pomodoroTimer.startTimer(_initialMinutes, TimerState.working);
-            timer = Timer.periodic(const Duration(seconds: 0), _updateTime);
-            print("count: $count");
-          },
-        );
-      } else {
-        Navigator.pushNamed(context, "/break",
-            arguments: {"data": _initialMinutes}).then(
-          (value) {
-            _pomodoroTimer = PomodoroTimer();
-            _pomodoroTimer.startTimer(_initialMinutes, TimerState.working);
-            timer = Timer.periodic(const Duration(seconds: 0), _updateTime);
-            print("count: $count");
-          },
-        );
-      }
+      _goToNextPage(context);
     }
 
     setState(() {
       _minutes = _currentMinutes;
       _second = _currentSeconds;
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _initialMinutes = widget.data;
-    _pomodoroTimer.startTimer(_initialMinutes, TimerState.working);
-    _timer = Timer.periodic(const Duration(seconds: 0), _updateTime);
   }
 
   @override
@@ -91,28 +125,17 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "ポモドーロのアプリを作る",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-                fontSize: 24,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.bold,
-                height: 0,
-              ),
+              _todo,
+              style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.1,
-            ),
+            DefaultSpace(),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  onPressed: () {
-                    _pomodoroTimer.resetTimer();
-                    _timer?.cancel();
-                    count = 0;
-                    Navigator.pop(context);
-                  },
+                  onPressed: () => _goBackPage(context),
                   icon: Icon(
                     Icons.arrow_left,
                     color: Theme.of(context).colorScheme.secondary,
@@ -121,51 +144,13 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
                 ),
                 Text(
                   "Working",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontSize: 24,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.bold,
-                    height: 0,
-                  ),
+                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
                 ),
                 IconButton(
                   onPressed: () {
-                    _pomodoroTimer.resetTimer();
-                    _timer?.cancel();
-                    count++;
-                    if (count >= 4) {
-                      count = 0;
-                      Navigator.pushNamed(context, "/rest",
-                          arguments: {"data": _initialMinutes}).then(
-                        (value) {
-                          _pomodoroTimer = PomodoroTimer();
-                          _pomodoroTimer.startTimer(
-                              _initialMinutes, TimerState.working);
-                          _timer = Timer.periodic(
-                              const Duration(seconds: 0), _updateTime);
-                          setState(() {
-                            _timerState = true;
-                          });
-                          print("count: $count");
-                        },
-                      );
-                    } else {
-                      Navigator.pushNamed(context, "/break",
-                          arguments: {"data": _initialMinutes}).then(
-                        (value) {
-                          _pomodoroTimer = PomodoroTimer();
-                          _pomodoroTimer.startTimer(
-                              _initialMinutes, TimerState.working);
-                          _timer = Timer.periodic(
-                              const Duration(seconds: 0), _updateTime);
-                          setState(() {
-                            _timerState = true;
-                          });
-                          print("count: $count");
-                        },
-                      );
-                    }
+                    _goToNextPage(context);
                   },
                   icon: Icon(
                     Icons.arrow_right,
@@ -175,9 +160,7 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
                 ),
               ],
             ),
-            const Padding(
-              padding: EdgeInsets.all(10.0),
-            ),
+            DefaultSpace(),
             Container(
               width: MediaQuery.of(context).size.width * 0.85,
               height: MediaQuery.of(context).size.height * 0.3,
@@ -188,28 +171,18 @@ class _WorkingPageBodyState extends State<WorkingPageBody> {
               child: Center(
                 child: Text(
                   "$_minutes:$_second",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontSize: 60,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.bold,
-                    height: 0,
-                  ),
+                  style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
                 ),
               ),
             ),
             IconButton(
               onPressed: () {
-                if (_timerState) {
-                  _pomodoroTimer.stopTimer();
-                  _timerState = false;
-                } else {
-                  _pomodoroTimer.startTimer(0, TimerState.working);
-                  _timerState = true;
-                }
+                _setTimerState();
               },
               icon: Icon(
-                _timerState ? Icons.pause : Icons.play_arrow,
+                _changeTimerState!.isActive ? Icons.pause : Icons.play_arrow,
                 color: Theme.of(context).colorScheme.secondary,
                 size: 60,
               ),
