@@ -15,6 +15,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+  flutter_launcher_icons: "^0.13.1"
 
 flutter:
   uses-material-design: true
@@ -22,3 +23,9 @@ flutter:
     - assets/sounds/working.mp3
     - assets/sounds/break.mp3
     - assets/sounds/rest.mp3
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/pomodoro-icon.png"
+  adaptive_icon_background: "#ffffff"
