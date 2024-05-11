@@ -1,5 +1,5 @@
 name: flutter_pomodoro
-description: "A new Flutter project."
+description: "Pomodoro Timer"
 publish_to: 'none'
 version: 0.1.0
 
@@ -7,6 +7,7 @@ environment:
   sdk: '>=3.3.4 <4.0.0'
 
 dependencies:
+  audioplayers: ^6.0.0
   flutter:
     sdk: flutter
 
@@ -17,3 +18,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/sounds/working.mp3
+    - assets/sounds/break.mp3
+    - assets/sounds/rest.mp3
