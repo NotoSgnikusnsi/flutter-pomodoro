@@ -20,5 +20,5 @@
 flutter build < apk / ios >
 ```
 ### Web
-GitHub Pagesで公開しています。
+GitHub Pagesで公開しています。(バグ有り)
 [PomTimer](https://notosgnikusnsi.github.io/flutter-pomodoro/)
