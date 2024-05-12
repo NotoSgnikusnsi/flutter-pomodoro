@@ -39324,7 +39324,7 @@ A.a63.prototype={
 $0(){this.b.d=this.a.a},
 $S:0}
 A.Em.prototype={
-N(a){return new A.uR(new A.Xu(),"PomoTimer",A.xd(null,B.zt,B.Nf,null),!1,null)}}
+N(a){return new A.uR(new A.Xu(),"PomTimer",A.xd(null,B.zt,B.Nf,null),!1,null)}}
 A.Xu.prototype={
 $1(a){var s=null,r=t.z
 switch(a.a){case"/work":return A.Es(new A.Xq(t.nA.a(a.b)),s,r)
