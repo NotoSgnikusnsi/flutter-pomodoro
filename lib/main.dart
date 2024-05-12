@@ -18,7 +18,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "Pomodoro",
+      title: "PomoTimer",
       theme: ThemeData(
         colorScheme: const ColorScheme.light(
           primary: Color(0xff1e1e1e),
