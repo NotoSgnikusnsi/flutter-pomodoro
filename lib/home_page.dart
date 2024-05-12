@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:PomTimer/padding.dart';
@@ -71,10 +72,12 @@ class _HomePageBodyState extends State<HomePageBody> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     return Center(
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.85,
-        height: MediaQuery.of(context).size.height * 0.9,
+        height: MediaQuery.of(context).size.height,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -124,35 +127,71 @@ class _HomePageBodyState extends State<HomePageBody> {
                 color: Theme.of(context).colorScheme.primary,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: _incrementMinutes,
-                    icon: Icon(
-                      Icons.arrow_drop_up,
-                      color: Theme.of(context).colorScheme.secondary,
-                      size: 40,
-                    ),
-                  ),
-                  DefaultSpace(),
-                  Text(
-                    "$_initialMinutes:00",
-                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.secondary,
+              child: kIsWeb || isLandscape
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          onPressed: _decrementMinutes,
+                          icon: Icon(
+                            Icons.arrow_left,
+                            color: Theme.of(context).colorScheme.secondary,
+                            size: 40,
+                          ),
                         ),
-                  ),
-                  DefaultSpace(),
-                  IconButton(
-                    onPressed: _decrementMinutes,
-                    icon: Icon(
-                      Icons.arrow_drop_down,
-                      color: Theme.of(context).colorScheme.secondary,
-                      size: 40,
+                        DefaultSpace(),
+                        Text(
+                          "$_initialMinutes:00",
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayLarge
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                        ),
+                        DefaultSpace(),
+                        IconButton(
+                          onPressed: _incrementMinutes,
+                          icon: Icon(
+                            Icons.arrow_right,
+                            color: Theme.of(context).colorScheme.secondary,
+                            size: 40,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          onPressed: _incrementMinutes,
+                          icon: Icon(
+                            Icons.arrow_drop_up,
+                            color: Theme.of(context).colorScheme.secondary,
+                            size: 40,
+                          ),
+                        ),
+                        DefaultSpace(),
+                        Text(
+                          "$_initialMinutes:00",
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayLarge
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                        ),
+                        DefaultSpace(),
+                        IconButton(
+                          onPressed: _decrementMinutes,
+                          icon: Icon(
+                            Icons.arrow_drop_down,
+                            color: Theme.of(context).colorScheme.secondary,
+                            size: 40,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
             ),
             DefaultSpace(),
             TextButton(
