@@ -1,11 +1,11 @@
 {
-    "name": "flutter_pomodoro",
-    "short_name": "flutter_pomodoro",
+    "name": "PomTimer",
+    "short_name": "PomTimer",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Pomodoro timer",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
